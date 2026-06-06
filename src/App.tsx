@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowRight,
+  ArrowUp,
   Download,
   Mail,
   Github,
@@ -18,7 +19,7 @@ import {
 const Navbar = () => (
   <nav className="fixed top-0 w-full z-50 bg-cream/80 backdrop-blur-md border-b border-charcoal/5">
     <div className="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-      <div className="text-xl font-medium tracking-tight">Tiyasa Saha</div>
+      <a href="#" className="text-xl font-medium tracking-tight hover:text-primary transition-colors">Tiyasa Saha</a>
       <ul className="flex space-x-8 text-sm font-medium uppercase tracking-widest text-charcoal/70">
         <li>
           <a className="hover:text-primary transition-colors" href="#about">
@@ -35,7 +36,7 @@ const Navbar = () => (
         </li>
         <li>
           <a className="hover:text-primary transition-colors" href="#projects">
-            Work
+            Projects
           </a>
         </li>
         <li>
@@ -72,7 +73,7 @@ const Hero = () => (
           className="inline-flex items-center gap-2 border-b border-charcoal pb-1 hover:text-primary hover:border-primary transition-all duration-300"
           href="#projects"
         >
-          View selected work
+          View Projects
           <ArrowRight className="w-4 h-4" />
         </a>
       </div>
@@ -144,13 +145,13 @@ const Experience = () => (
       <div className="space-y-12">
         {[
           {
-            date: "MARCH 2026 — PRESENT",
+            date: "MAR 2026 — PRESENT",
             title: "Data Engineer",
             company: "Saayam For All • Remote",
             desc: "Assisted in building ETL pipelines using Python and SQL to transform raw data into structured datasets. Managed data on AWS S3, performed quality checks, and monitored pipelines for reliability. Supported query development and Power BI dashboards to deliver actionable insights.",
           },
           {
-            date: "SEPT 2025 — FEB 2026",
+            date: "SEPT 2025 — MAR 2026",
             title: "AI Intern",
             company: "Interview Query • Remote",
             desc: "Authored 100+ tech blogs on DS/ML/DE concepts, improving domain ranking by 7 points. Optimized content strategy via marketing data analysis, contributing to a 100% increase in sitewide impressions and CTR. Designed 200+ SQL/Python/ML questions with detailed technical solutions.",
@@ -246,7 +247,7 @@ const Projects = () => (
   <section className="py-24 px-6 max-w-6xl mx-auto" id="projects">
     <div className="flex justify-between items-end mb-16">
       <div>
-        <h2 className="text-4xl font-light">Selected Work</h2>
+        <h2 className="text-4xl font-light">Projects</h2>
         <p className="text-charcoal/50 mt-2 italic">
           A focus on story and impact.
         </p>
@@ -337,7 +338,7 @@ const Projects = () => (
 
 const Toolbox = () => (
   <section className="py-24 px-6 max-w-6xl mx-auto border-y border-charcoal/5">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
       <div>
         <h2 className="text-3xl font-light mb-8">The Toolbox</h2>
         <p className="text-charcoal/60 mb-8 leading-relaxed">
@@ -359,27 +360,59 @@ const Toolbox = () => (
           ))}
         </ul>
       </div>
-      <div className="space-y-8">
+      <div className="space-y-0 divide-y divide-charcoal/8">
         {[
-          { label: "Deep Learning", value: "90%" },
-          { label: "Statistical Modeling", value: "95%" },
-          { label: "Data Ethics & Privacy", value: "85%" },
-        ].map((skill, idx) => (
-          <div key={idx} className="space-y-2">
-            <div className="flex justify-between text-sm uppercase tracking-widest">
-              <span>{skill.label}</span>
-              <span>{skill.value}</span>
+          {
+            domain: "AI & Generative Systems",
+            skills: ["LLMs", "RAG", "LangChain", "Agentic AI", "OpenAI SDK"],
+          },
+          {
+            domain: "Data Engineering",
+            skills: [
+              "ETL Pipelines",
+              "Apache Spark",
+              "Airflow",
+              "AWS S3",
+              "Azure",
+            ],
+          },
+          {
+            domain: "Analysis & Visualization",
+            skills: ["Power BI", "Tableau", "D3.js", "Statistical Modeling"],
+          },
+          {
+            domain: "ML & Deep Learning",
+            skills: [
+              "Scikit-learn",
+              "TensorFlow",
+              "PyTorch",
+              "FAISS",
+              "Hugging Face",
+            ],
+          },
+        ].map((group, idx) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: idx * 0.1 }}
+            className="py-5"
+          >
+            <p className="text-xs uppercase tracking-widest font-semibold text-accent mb-3">
+              {group.domain}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {group.skills.map((skill, i) => (
+                <span
+                  key={i}
+                  className="text-sm text-charcoal/70 bg-charcoal/5 px-3 py-1 rounded-full"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
-            <div className="h-[2px] w-full bg-charcoal/10 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: skill.value }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="h-full bg-accent"
-              />
-            </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -399,10 +432,14 @@ const Resume = () => (
         Download my full professional CV including technical publications and
         speaking history.
       </p>
-      <button className="bg-charcoal text-white px-8 py-4 rounded-2xl hover:bg-primary transition-colors flex items-center gap-3 mx-auto shadow-xl group">
+      <a
+        href="/Tiyasa_Saha_Resume.pdf"
+        download
+        className="bg-charcoal text-white px-8 py-4 rounded-2xl hover:bg-primary transition-colors inline-flex items-center gap-3 mx-auto shadow-xl group"
+      >
         <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
         Download CV (.pdf)
-      </button>
+      </a>
     </motion.div>
   </section>
 );
@@ -412,29 +449,29 @@ const Footer = () => (
     <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
       <div className="text-center md:text-left">
         <p className="text-sm font-medium">
-          Currently based in{" "}
-          <span className="text-accent italic">Remote / USA</span>
-        </p>
-        <p className="text-xs text-charcoal/40 mt-1">
-          Available for selective consultation & collaboration.
+          Currently based in <span className="text-accent italic">USA</span>
         </p>
       </div>
       <div className="flex space-x-8">
         <a
           className="text-charcoal/60 hover:text-primary transition-colors flex items-center gap-1"
-          href="#"
+          href="https://www.linkedin.com/in/tiyasa-saha/"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Linkedin className="w-4 h-4" /> LinkedIn
         </a>
         <a
           className="text-charcoal/60 hover:text-primary transition-colors flex items-center gap-1"
-          href="#"
+          href="https://github.com/Tiyasa-Saha"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Github className="w-4 h-4" /> GitHub
         </a>
         <a
           className="text-charcoal/60 hover:text-primary transition-colors flex items-center gap-1"
-          href="mailto:tiyasa@example.com"
+          href="mailto:tiyasa.saha2110@gmail.com"
         >
           <Mail className="w-4 h-4" /> Email
         </a>
@@ -445,6 +482,29 @@ const Footer = () => (
     </div>
   </footer>
 );
+
+const ScrollToTop = () => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <motion.button
+      type="button"
+      aria-label="Back to top"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.8 }}
+      transition={{ duration: 0.3 }}
+      className="fixed bottom-8 right-8 z-50 w-10 h-10 flex items-center justify-center bg-charcoal text-white rounded-full shadow-lg hover:bg-primary transition-colors"
+      style={{ pointerEvents: visible ? "auto" : "none" }}
+    >
+      <ArrowUp className="w-4 h-4" />
+    </motion.button>
+  );
+};
 
 export default function App() {
   return (
@@ -459,6 +519,7 @@ export default function App() {
         <Resume />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }
